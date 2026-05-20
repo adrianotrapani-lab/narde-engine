@@ -14,9 +14,19 @@ class Player(BaseModel):
     name: Optional[str] = None
     score: Optional[int] = 0
 
+class Cell(BaseModel):
+    x: int
+    y: int
+    value: Optional[str] = None
+
+class Board(BaseModel):
+    width: int
+    height: int
+    cells: List[Cell] = []
+
 class StateResponse(BaseModel):
     state: str
-    board: List  # keep generic for now; refine to a concrete type later
+    board: Board
     turn: Optional[int] = None
     players: List[Player] = []
     current_player: Optional[int] = None
@@ -29,10 +39,12 @@ def roll(count: int = Query(2, ge=1, le=20), sides: int = Query(6, ge=2, le=100)
 
 @app.get("/state", response_model=StateResponse)
 def get_state():
-    # Minimal typed state expected by tests; replace with real game logic later.
+    # Example board: 3x3 empty cells
+    cells = [Cell(x=x, y=y, value=None) for y in range(3) for x in range(3)]
+    board = Board(width=3, height=3, cells=cells)
     state = StateResponse(
         state="ok",
-        board=[],
+        board=board,
         turn=None,
         players=[],
         current_player=None
