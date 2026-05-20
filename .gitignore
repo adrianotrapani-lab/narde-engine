@@ -22,3 +22,6 @@ dist/
 
 # Logs
 *.log
+
+narde_state.db
+
