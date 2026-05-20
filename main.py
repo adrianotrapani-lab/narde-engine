@@ -33,3 +33,6 @@ def make_move(move: Move):
 @app.get("/state")
 def get_state():
     return game_state
+@app.get("/")
+def read_root():
+    return {"status": "ok"}
