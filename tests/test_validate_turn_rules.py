@@ -53,4 +53,5 @@ def test_invalid_move_destination_occupied_by_same_color():
     assert resp.status_code == 200
     data = resp.json()
     assert data.get("valid") is False
-    assert "piece" in data.get("reason", "").lower() or "occupied" in data.get("reason", "").lower()
+    # Stacking is allowed in Narde; this move fails because it would create a forbidden 6-run
+    assert any(kw in data.get("reason", "").lower() for kw in ("piece", "occupied", "consecutive", "forbidden", "run"))

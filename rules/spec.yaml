@@ -1,0 +1,27 @@
+rules:
+  - id: no_hitting
+    description: "Cannot land on opponent-occupied points"
+    type: invariant
+    check: destination_must_not_be_opponent
+  - id: single_step_forward
+    description: "Non-capturing moves must be single-step forward in same column"
+    type: move_shape
+    params:
+      max_step: 1
+  - id: stacking_allowed
+    description: "May land on own-occupied points"
+    type: permission
+  - id: max_consecutive
+    description: "Prevent creating 6+ consecutive mover-only checkers"
+    type: window_invariant
+    params:
+      threshold: 6
+  - id: anticlockwise_movement
+    description: "Players move anticlockwise"
+    type: direction
+    params: {}
+  - id: forced_max_moves
+    description: "When multiple moves possible, choose move that allows most subsequent moves"
+    type: preference
+    params: {}
+  # add more rules later
