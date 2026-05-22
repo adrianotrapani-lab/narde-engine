@@ -1,40 +1,9 @@
-name: Deploy static to GitHub Pages
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Prepare public folder from static
         run: |
           rm -rf public || true
           mkdir -p public
-          cp -r static/* public/ || true
-
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: public
-
-  deploy:
-    needs: prepare
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+          if [ -d static ]; then
+            cp -a static/. public/
+          else
+            echo "static directory not found"
+          fi
