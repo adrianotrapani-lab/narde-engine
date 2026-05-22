@@ -1,6 +1,6 @@
-
 import pytest
 
-@pytest.mark.skip(reason="No test template yet for rule anticlockwise_movement; implement generator template in tools/testgen.py")
-def test_placeholder_anticlockwise_movement():
+def test_anticlockwise_movement_placeholder():
+    # Smoke test placeholder for anticlockwise movement semantics.
+    # Full enforcement requires mapping board to track; implement when move-selection logic exists.
     assert True

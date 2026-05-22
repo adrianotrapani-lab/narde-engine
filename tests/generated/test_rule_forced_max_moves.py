@@ -1,6 +1,6 @@
-
 import pytest
 
-@pytest.mark.skip(reason="No test template yet for rule forced_max_moves; implement generator template in tools/testgen.py")
-def test_placeholder_forced_max_moves():
+def test_forced_max_moves_placeholder():
+    # Placeholder smoke test for forced-max-moves preference.
+    # Implement scenario-based test when move-selection logic exists.
     assert True

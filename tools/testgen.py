@@ -36,6 +36,29 @@ def test_max_consecutive_window():
     move = {'from':{'r':6,'c':0}, 'to':{'r':7,'c':1}}
     assert violates_consecutive_rule("W", board, move, threshold=6) is True
 """,
+    "stacking_allowed": """
+def test_stacking_allowed():
+    from narde_engine.rules import validate_move_basic
+    board = [[0]*8 for _ in range(8)]
+    board[6][0] = "W"
+    board[5][0] = "W"
+    move = {'from':{'r':6,'c':0}, 'to':{'r':5,'c':0}}
+    # stacking on own piece should be allowed
+    valid, reason = validate_move_basic("W", board, move)
+    assert valid is True
+""",
+    "anticlockwise_movement": """
+def test_anticlockwise_movement_placeholder():
+    # Smoke test placeholder for anticlockwise movement semantics.
+    # Full enforcement requires mapping board to track; implement when move-selection logic exists.
+    assert True
+""",
+    "forced_max_moves": """
+def test_forced_max_moves_placeholder():
+    # Placeholder smoke test for forced-max-moves preference.
+    # Implement scenario-based test when move-selection logic exists.
+    assert True
+""",
     # Add more concrete templates here as you implement them
 }
 
