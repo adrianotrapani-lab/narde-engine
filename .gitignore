@@ -25,3 +25,9 @@ dist/
 
 narde_state.db
 
+__pycache__/
+*.pyc
+.venv/
+.env
+.devcontainer/
+secrets.json
