@@ -1,9 +1,19 @@
-      - name: Prepare public folder from static
+      - name: Prepare public folder from static/build/assets
         run: |
           rm -rf public || true
           mkdir -p public
+          # copy common build output folders into public root
           if [ -d static ]; then
             cp -a static/. public/
-          else
-            echo "static directory not found"
           fi
+          if [ -d build ]; then
+            cp -a build/. public/
+          fi
+          if [ -d dist ]; then
+            cp -a dist/. public/
+          fi
+          if [ -d assets ]; then
+            cp -a assets/. public/
+          fi
+          echo "public contents:"
+          ls -la public || true
