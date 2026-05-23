@@ -1,37 +1,38 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Narde Engine</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>
-      body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:40px;color:#111}
-      a{color:#0366d6}
-      header{margin-bottom:24px}
-      pre{background:#f6f8fa;padding:12px;border-radius:6px}
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>Narde Engine</h1>
-      <p>Demo FastAPI backend with a static frontend. This site is published from <strong>docs/</strong> on the <strong>main</strong> branch.</p>
-    </header>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Narde Engine — Preview</title>
 
-    <section>
-      <h2>How to publish the full site</h2>
-      <ul>
-        <li>If your built frontend files are in <code>static/</code>, copy them into <code>docs/</code> or add a Pages workflow to deploy <code>static/</code>.</li>
-        <li>For a quick preview, copy the frontend <code>index.html</code> and required assets into <code>docs/</code>.</li>
-      </ul>
-    </section>
+  <!-- load your component CSS -->
+  <link rel="stylesheet" href="/static/components/dice.css" />
 
-    <section>
-      <h2>Repository</h2>
-      <p>View the project on GitHub: <a href="https://github.com/adrianotrapani-lab/narde-engine">adrianotrapani-lab/narde-engine</a></p>
-    </section>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+    header{margin-bottom:18px}
+    #app{max-width:980px;margin:0 auto}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Narde Engine — Quick Preview</h1>
+    <p>Using files from <strong>/static/</strong>. This is a minimal preview page.</p>
+  </header>
 
-    <footer>
-      <p>Published via GitHub Pages</p>
-    </footer>
-  </body>
+  <main id="app">
+    <!-- place where your component or demo will mount -->
+    <div id="demo-root">
+      <!-- If your JS expects a mount node, it should use #demo-root -->
+    </div>
+  </main>
+
+  <!-- load your JS (adjust path if your build uses a different file) -->
+  <script src="/static/js/undo.js" defer></script>
+
+  <!-- small fallback if JS doesn't mount anything -->
+  <noscript>
+    <p style="color:#a00">JavaScript is required for the interactive demo.</p>
+  </noscript>
+</body>
 </html>
