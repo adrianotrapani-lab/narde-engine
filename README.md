@@ -17,3 +17,17 @@ python -m uvicorn main:app --host 127.0.0.1 --port 8000
 ## Endpoints
 - GET /state
 - GET /roll?count=2&sides=6
+
+## Previewing the site (GitHub Pages)
+
+Open the project Pages URL in a browser to preview the live site:
+https://adrianotrapani-lab.github.io/narde-engine/
+
+If you want to preview changes locally:
+- Edit files under `docs/` and commit to `main`.
+- The workflow on `main` will run a smoke test and deploy `docs/` to Pages.
+- To force a fresh preview, open the Pages URL in an incognito/private window and hard‑reload (DevTools → Network → Disable cache → hard reload).
+
+Notes:
+- Keep static assets under `docs/static/` so Pages serves them correctly.
+- For quick UI checks, commit small placeholder assets to `docs/static/` and verify the Pages URL above.
