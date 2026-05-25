@@ -33,9 +33,9 @@ jobs:
           fi
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: docs
+  uses: actions/upload-pages-artifact@v2
+  with:
+    path: docs
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
