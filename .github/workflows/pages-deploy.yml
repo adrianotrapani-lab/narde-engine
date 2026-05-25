@@ -1,19 +1,27 @@
-      - name: Prepare public folder from static/build/assets
+name: Build and Deploy Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Smoke test - docs present
         run: |
-          rm -rf public || true
-          mkdir -p public
-          # copy common build output folders into public root
-          if [ -d static ]; then
-            cp -a static/. public/
+          if [ ! -f docs/index.html ]; then
+            echo "ERROR: docs/index.html not found"; exit 1
           fi
-          if [ -d build ]; then
-            cp -a build/. public/
-          fi
-          if [ -d dist ]; then
-            cp -a dist/. public/
-          fi
-          if [ -d assets ]; then
-            cp -a assets/. public/
-          fi
-          echo "public contents:"
-          ls -la public || true
+          echo "docs/index.html found"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
