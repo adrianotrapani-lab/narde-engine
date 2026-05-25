@@ -1,0 +1,45 @@
+name: Run Pytests And Upload
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Create venv and install deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest
+
+      - name: Run pytest and capture logs
+        run: |
+          mkdir -p results
+          source .venv/bin/activate
+          # run pytest, save console output and junit xml
+          pytest -q --junitxml=results/junit.xml 2>&1 | tee results/pytest.log || true
+
+      - name: Save tests snapshot
+        run: |
+          mkdir -p results/tests_snapshot
+          cp -r tests results/tests_snapshot || true
+
+      - name: Upload pytest artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: |
+            results/pytest.log
+            results/junit.xml
+            results/tests_snapshot
