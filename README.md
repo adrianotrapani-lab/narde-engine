@@ -31,3 +31,11 @@ If you want to preview changes locally:
 Notes:
 - Keep static assets under `docs/static/` so Pages serves them correctly.
 - For quick UI checks, commit small placeholder assets to `docs/static/` and verify the Pages URL above.
+
+## Running the model selector smoke test locally
+
+A simple script is included to verify the local runner or the presence of a cloud adapter.
+
+Run the smoke test:
+- Ensure any local runner you want to test is running on `http://localhost:8000`.
+- From the repo root run:
