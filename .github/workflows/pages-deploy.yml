@@ -11,12 +11,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up bash permissions
+        run: |
+          chmod +x tools/agent/smoke_test.sh || true
+
       - name: Smoke test - docs present
         run: |
           if [ ! -f docs/index.html ]; then
             echo "ERROR: docs/index.html not found"; exit 1
           fi
           echo "docs/index.html found"
+
+      - name: Run agent smoke test (optional)
+        run: |
+          # Run the smoke test script but do not fail the entire workflow on transient local runner absence.
+          # This keeps Pages deploy resilient while still surfacing issues in logs.
+          if bash tools/agent/smoke_test.sh; then
+            echo "Agent smoke test passed"
+          else
+            echo "Agent smoke test failed or local runner unavailable; continuing with Pages deploy"
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v1
