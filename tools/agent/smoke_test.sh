@@ -40,3 +40,13 @@ else
     exit 1
   fi
 fi
+
+
+Interpretation:
+- **Success (local)**: the script reports the local runner health and a non-empty infer response.
+- **Success (cloud adapter present)**: local runner not available but `tools/agent/adapters/cloud_adapter.js` exists.
+- **Failure**: no local runner and no cloud adapter found; check the runner or add a cloud adapter.
+
+Notes:
+- The script is intentionally minimal for CI smoke checks; it is safe to run on your development machine.
+- Make the script executable locally if needed: `chmod +x tools/agent/smoke_test.sh`.
