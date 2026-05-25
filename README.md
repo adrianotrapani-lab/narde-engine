@@ -39,3 +39,9 @@ A simple script is included to verify the local runner or the presence of a clou
 Run the smoke test:
 - Ensure any local runner you want to test is running on `http://localhost:8000`.
 - From the repo root run:
+
+## CI and Pages
+
+[![Build and Deploy Pages](https://github.com/adrianotrapani-lab/narde-engine/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/adrianotrapani-lab/narde-engine/actions/workflows/pages-deploy.yml)
+
+[![GitHub Pages](https://img.shields.io/badge/Pages-live-brightgreen)](https://adrianotrapani-lab.github.io/narde-engine/)
