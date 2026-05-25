@@ -1,60 +1,10 @@
-.undo-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.dice-row {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.die {
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #333;
-  border-radius: 0.375rem;
-  font-weight: bold;
-  cursor: default;
-  transition: opacity 0.2s;
-}
-
-.die-disabled {
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-.die-face {
-  font-size: 0.875rem;
-  user-select: none;
-}
-
-.controls {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.controls button {
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.25rem;
-  border: 1px solid #555;
-  cursor: pointer;
-}
-
-.controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Re-enable animation: brief highlight when a die is restored */
-@keyframes reenable-flash {
-  0%   { background-color: #ffd700; transform: scale(1.15); }
-  100% { background-color: transparent; transform: scale(1); }
-}
-
-.reenabled {
-  animation: reenable-flash 0.4s ease-out forwards;
+/* Minimal placeholder for dice component styles.
+   Replace with the real dice.css from static/components when ready. */
+.dice {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
