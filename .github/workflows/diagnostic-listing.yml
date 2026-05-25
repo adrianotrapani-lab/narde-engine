@@ -1,0 +1,31 @@
+name: Diagnostic Listing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Print repo root listing
+        run: |
+          echo "=== Repo root listing ===" > repo-listing.txt
+          ls -la >> repo-listing.txt || true
+          echo "" >> repo-listing.txt
+          echo "=== All files (recursive, max depth 3) ===" >> repo-listing.txt
+          find . -maxdepth 3 -type f -print | sed 's|^\./||' >> repo-listing.txt || true
+
+      - name: Print last commit
+        run: |
+          git log -1 --pretty=oneline > last-commit.txt || echo "no commits" > last-commit.txt
+
+      - name: Upload diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-diagnostics
+          path: |
+            repo-listing.txt
+            last-commit.txt
