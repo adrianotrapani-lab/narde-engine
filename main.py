@@ -8,10 +8,11 @@ app = FastAPI(title='Narde Engine Docs Server')
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'docs'))
 ASSETS_STATIC_DIR = os.path.join(BASE_DIR, 'assets', 'static')
 
-# Serve the docs folder at /static
-app.mount('/static', StaticFiles(directory=BASE_DIR), name='static')
+# Serve the docs folder at /static only if it exists
+if os.path.isdir(BASE_DIR):
+    app.mount('/static', StaticFiles(directory=BASE_DIR), name='static')
 
-# Mount the more specific path first, then the general one
+# Mount the more specific path first, then the general one, only if assets dir exists
 if os.path.isdir(ASSETS_STATIC_DIR):
     app.mount('/assets/static', StaticFiles(directory=ASSETS_STATIC_DIR), name='assets_static')
     app.mount('/assets', StaticFiles(directory=ASSETS_STATIC_DIR), name='assets')
