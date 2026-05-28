@@ -1,5 +1,10 @@
 ﻿name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ main, replit-workspace ]
+  pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -8,11 +13,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      - name: Install deps
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Start uvicorn in background
+        run: python -m uvicorn main:app --host 127.0.0.1 --port 8000 &
+      - name: Wait for server
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest requests
+          for i in {1..30}; do
+            curl -sSf http://127.0.0.1:8000/health && break || sleep 1
+          done
       - name: Run tests
-        run: python -m pytest -q
+        run: python -m pytest tests -q
