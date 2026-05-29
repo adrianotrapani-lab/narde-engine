@@ -34,3 +34,25 @@ jobs:
         run: |
           sleep 5
           curl -f http://127.0.0.1:8000/health
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: |
+          cd docs/assets/ui-components
+          npm install
+      - name: Build frontend
+        run: |
+          cd docs/assets/ui-components
+          npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-dist
+          path: docs/assets/ui-components/dist
