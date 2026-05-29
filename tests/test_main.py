@@ -1,3 +1,9 @@
-﻿# minimal tests/test_main.py (UTF-8)
-def test_placeholder():
-    assert True
+from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+def test_health_endpoint():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
