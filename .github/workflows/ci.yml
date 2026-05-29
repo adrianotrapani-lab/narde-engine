@@ -59,7 +59,7 @@ jobs:
 
   pages:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [test, smoke, build]
     permissions:
       pages: write
       id-token: write
