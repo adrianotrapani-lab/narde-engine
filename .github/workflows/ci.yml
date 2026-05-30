@@ -9,15 +9,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Verify static files
+        run: |
+          test -f docs/assets/js/board.js || (echo "Missing board.js" && exit 1)
 
       - name: Start uvicorn in background
         run: |
