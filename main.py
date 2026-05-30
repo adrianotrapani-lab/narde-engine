@@ -4,10 +4,6 @@ from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Mount both static and assets paths
-app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
-app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
-
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -15,6 +11,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount both static and assets paths
+app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
+app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
 
 @app.get("/")
 async def root():
