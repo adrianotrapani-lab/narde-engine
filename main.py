@@ -1,26 +1,23 @@
 ﻿from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS middleware
+# ✅ Add CORS middleware
+# This allows browser clients (like your UI) to call the API without cross-origin errors.
+# Adjust `allow_origins` if you want to restrict to specific domains later.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],  # allow all origins for now
+    allow_credentials=True,
+    allow_methods=["*"],  # allow all HTTP methods
+    allow_headers=["*"],  # allow all headers
 )
 
-# Mount static and assets
-app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
-app.mount("/assets/js", StaticFiles(directory="docs/assets/js"), name="assets-js")
-app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
-
 @app.get("/")
-async def root():
-    return {"message": "Narde engine running"}
+def root():
+    return {"message": "Welcome to the Narde rules engine API"}
 
 @app.get("/health")
-async def health():
+def health():
     return {"status": "ok"}
