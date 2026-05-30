@@ -1,33 +1,26 @@
 ﻿from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import os
+from middleware import add_cors
 
 app = FastAPI()
 
-# ✅ Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # allow all origins for now
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Add CORS middleware
+add_cors(app)
 
-# ✅ Mount static and assets directories
-static_path = os.path.join(os.path.dirname(__file__), "docs", "static")
-assets_path = os.path.join(os.path.dirname(__file__), "docs", "assets")
-
-if os.path.isdir(static_path):
-    app.mount("/static", StaticFiles(directory=static_path), name="static")
-
-if os.path.isdir(assets_path):
-    app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+# Mount static and assets directories
+app.mount("/static", StaticFiles(directory="docs/static"), name="static")
+app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
 
 @app.get("/")
-def root():
-    return {"message": "Welcome to the Narde rules engine API"}
+async def root():
+    return FileResponse("docs/index.html")
 
 @app.get("/health")
-def health():
+async def health():
     return {"status": "ok"}
+
+# Example API route
+@app.get("/api/rules")
+async def get_rules():
+    return {"rules": "Narde rules engine is active"}
