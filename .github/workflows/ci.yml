@@ -72,6 +72,11 @@ jobs:
           path: |
             pytest-coverage-${{ matrix.python-version }}.txt
             coverage.xml
+      - name: UI smoke test
+        run: |
+          curl -sSf http://127.0.0.1:8000/ | grep -q "index.html" || (echo "index.html not served" && exit 1)
+          curl -sSf http://127.0.0.1:8000/static/js/board.js || (echo "board.js missing" && exit 1)
+          curl -sSf http://127.0.0.1:8000/assets/components/dice.css || (echo "dice.css missing" && exit 1)
 
   docker-build:
     runs-on: ubuntu-latest
