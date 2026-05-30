@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -11,12 +12,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static and assets
 app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
 app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
 
 @app.get("/")
 async def root():
     return {"message": "Narde engine running"}
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
