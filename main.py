@@ -1,29 +1,19 @@
-﻿name: CI
+﻿from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.cors import CORSMiddleware
 
-on:
-  push:
-    branches: [ main, replit-workspace ]
-  pull_request:
+app = FastAPI()
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Start uvicorn in background
-        run: |
-          nohup python -m uvicorn main:app --host 127.0.0.1 --port 8000 &
-          sleep 20
-      - name: Wait for server
-        run: |
-          for i in {1..30}; do
-            curl -sSf http://127.0.0.1:8000/ || sleep 1
-          done
-      - name: Run tests
-        run: pytest -q
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
+app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
+
+@app.get("/")
+async def root():
+    return {"message": "Narde engine running"}
