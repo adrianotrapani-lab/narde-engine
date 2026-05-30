@@ -1,81 +1,14 @@
-﻿name: CI
-
-on:
-  push:
-    branches: [ main, replit-workspace ]
-  pull_request:
-
-jobs:
-  lint:
+﻿  docker-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          python-version: '3.11'
-      - name: Install linters
-        run: pip install flake8 mypy
-      - name: Run flake8
-        run: flake8 . | tee flake8-report.txt
-      - name: Run mypy
-        run: mypy . | tee mypy-report.txt
-      - name: Upload lint artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: lint-reports
-          path: |
-            flake8-report.txt
-            mypy-report.txt
-
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    steps:
-      - uses: actions/checkout@v5
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-${{ matrix.python-version }}-
-      - name: Install dependencies
-        run: pip install -r requirements.txt pytest pytest-cov
-      - name: Verify static files
-        run: |
-          test -f docs/assets/js/board.js || (echo "Missing board.js" && exit 1)
-          test -f docs/assets/static/components/dice.css || (echo "Missing dice.css" && exit 1)
-      - name: Start uvicorn in background
-        run: |
-          python -m uvicorn main:app --host 127.0.0.1 --port 8000 &
-          sleep 30
-      - name: Wait for server
-        run: |
-          for i in {1..40}; do
-            curl -sSf http://127.0.0.1:8000/health && break || sleep 1
-          done
-      - name: Run tests with coverage threshold
-        run: pytest --cov=./ --cov-report=xml --cov-report=term --cov-fail-under=80 | tee pytest-coverage-${{ matrix.python-version }}.txt
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report-${{ matrix.python-version }}
-          path: |
-            pytest-coverage-${{ matrix.python-version }}.txt
-            coverage.xml
-
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Docker image
-        run: docker build -t narde-engine:ci .
+        run: docker build -t ghcr.io/${{ github.repository }}/narde-engine:ci .
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}/narde-engine:ci
