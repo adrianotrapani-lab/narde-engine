@@ -14,6 +14,7 @@ app.add_middleware(
 
 # Mount static and assets
 app.mount("/assets", StaticFiles(directory="docs/assets"), name="assets")
+app.mount("/assets/js", StaticFiles(directory="docs/assets/static/js"), name="assets-js")
 app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
 
 @app.get("/")
