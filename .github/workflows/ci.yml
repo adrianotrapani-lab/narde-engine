@@ -46,7 +46,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt pytest pytest-cov
       - name: Verify static files
         run: |
           test -f docs/assets/js/board.js || (echo "Missing board.js" && exit 1)
@@ -60,10 +60,12 @@ jobs:
           for i in {1..40}; do
             curl -sSf http://127.0.0.1:8000/health && break || sleep 1
           done
-      - name: Run tests
-        run: pytest -q --tb=short --disable-warnings | tee pytest-report.txt
-      - name: Upload test artifacts
+      - name: Run tests with coverage
+        run: pytest --cov=./ --cov-report=xml --cov-report=term | tee pytest-coverage.txt
+      - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
-          path: pytest-report.txt
+          name: coverage-report
+          path: |
+            pytest-coverage.txt
+            coverage.xml
