@@ -1,18 +1,28 @@
 ﻿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 
 app = FastAPI()
 
 # ✅ Add CORS middleware
-# This allows browser clients (like your UI) to call the API without cross-origin errors.
-# Adjust `allow_origins` if you want to restrict to specific domains later.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # allow all origins for now
     allow_credentials=True,
-    allow_methods=["*"],  # allow all HTTP methods
-    allow_headers=["*"],  # allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+# ✅ Mount static and assets directories
+static_path = os.path.join(os.path.dirname(__file__), "docs", "static")
+assets_path = os.path.join(os.path.dirname(__file__), "docs", "assets")
+
+if os.path.isdir(static_path):
+    app.mount("/static", StaticFiles(directory=static_path), name="static")
+
+if os.path.isdir(assets_path):
+    app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
 
 @app.get("/")
 def root():
