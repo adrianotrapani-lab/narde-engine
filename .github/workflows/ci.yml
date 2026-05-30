@@ -19,12 +19,21 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Verify static files
         run: |
           test -f docs/assets/js/board.js || (echo "Missing board.js" && exit 1)
+          test -f docs/assets/static/components/dice.css || (echo "Missing dice.css" && exit 1)
 
       - name: Start uvicorn in background
         run: |
