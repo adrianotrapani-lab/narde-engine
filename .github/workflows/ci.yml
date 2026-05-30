@@ -6,19 +6,31 @@ on:
   pull_request:
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - uses: actions/checkout@v5
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install linters
+        run: pip install flake8 mypy
+      - name: Run flake8
+        run: flake8 .
+      - name: Run mypy
+        run: mypy .
 
+  test:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -26,25 +38,20 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Verify static files
         run: |
           test -f docs/assets/js/board.js || (echo "Missing board.js" && exit 1)
           test -f docs/assets/static/components/dice.css || (echo "Missing dice.css" && exit 1)
-
       - name: Start uvicorn in background
         run: |
           python -m uvicorn main:app --host 127.0.0.1 --port 8000 &
-          sleep 30   # ⬅️ extended delay for server startup
-
+          sleep 30
       - name: Wait for server
         run: |
           for i in {1..40}; do
             curl -sSf http://127.0.0.1:8000/health && break || sleep 1
           done
-
       - name: Run tests
         run: pytest -q
