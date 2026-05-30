@@ -1,0 +1,26 @@
+name: Coverage Pages
+
+on:
+  push:
+    branches: [ main, replit-workspace ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-cov coverage
+      - name: Run tests with coverage
+        run: pytest --cov=./ --cov-report=xml --cov-report=html
+      - name: Upload coverage artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: htmlcov
+      - name: Deploy coverage report to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
