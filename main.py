@@ -17,3 +17,6 @@ app.mount("/static", StaticFiles(directory="docs/assets/static"), name="static")
 @app.get("/")
 async def root():
     return {"message": "Narde engine running"}
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
